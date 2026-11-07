@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://ayanlatif.netlify.app/sitemap.xml
+Sitemap: https://ayanlatif198-lab.github.io/sitemap.xml
