@@ -40,9 +40,10 @@ var k=await crypto.subtle.importKey('raw',e.encode(pw),'PBKDF2',false,['deriveKe
 var key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:salt,iterations:it,hash:'SHA-256'},k,{name:'AES-GCM',length:256},false,['encrypt']);
 var ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv:iv},key,e.encode(txt)));return{i:it,s:B64(salt),v:B64(iv),c:B64(ct)}}
 function dl(n,t){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'application/json'}));a.download=n;document.body.appendChild(a);a.click();a.remove()}
-$('pwf').onsubmit=async function(e){e.preventDefault();var m=$('pwm'),a=$('np').value;if(a!=$('np2').value){m.textContent='The two passwords do not match.';return}
+$('pwf').onsubmit=async function(e){e.preventDefault();var m=$('pwm'),a=$('np').value.trim();if(a!=$('np2').value.trim()){m.textContent='The two passwords do not match.';return}
 if(a.length<8){m.textContent='Use at least 8 characters.';return}
-try{var nm=location.pathname.split('/').pop()||'';if(!/\.html$/.test(nm))nm+='.html';var v=JSON.stringify(await encv(a,nm));try{localStorage.setItem('ayVault',v)}catch(x){}dl('vault.json',v);this.reset();m.textContent='Done. vault.json was downloaded. On GitHub, open the assets folder, then Add file, Upload files, and drop vault.json in to make the new password live.'}catch(x){m.textContent='Could not set the password in this browser.'}};
+try{var nm=location.pathname.split('/').pop()||'';if(!/\.html$/.test(nm))nm+='.html';var v=JSON.stringify(await encv(a,nm));try{localStorage.setItem('ayVault',v)}catch(x){}$('vt').value=v;$('vt').hidden=false;$('vc').hidden=false;this.reset();m.textContent='Saved. To make it live: tap Copy below, open assets/vault.json on GitHub, tap the pencil icon, select all, paste, then tap Commit changes. Wait 2 minutes.'}catch(x){m.textContent='Could not set the password in this browser.'}};
+$('vc').onclick=function(){var t=$('vt');t.select();try{navigator.clipboard.writeText(t.value)}catch(x){document.execCommand('copy')}this.textContent='Copied'};
 $('pub').onclick=async function(){var m=$('pm');m.textContent='Building...';
 try{var s2={};try{s2=await(await fetch('status.json',{cache:'no-store'})).json()}catch(x){}
 s2._updated=new Date().toISOString();L.forEach(function(r){if(st(r)!='pending')s2[r.c]={s:st(r),n:r.t||''};else delete s2[r.c]});
